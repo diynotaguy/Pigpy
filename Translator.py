@@ -1,7 +1,18 @@
 from pathlib import Path
 
+#----------------------------------------------------------------------------------------------
+
+# Notes:
+ # backslashes in python must be changed to another escape character (your choice) in pigpy
+ # doesn't support """ """ if stringTranslation is disabled
+ # doesn't support octal or hex value escape character code
+
+#----------------------------------------------------------------------------------------------
+
 letters = 'abcdefghijklmnopqrstuvwxyz'
 vowels = 'aeiou'
+
+englishWords = ['wL1.txt', 'wL2.txt', 'wL3.txt', 'wL4.txt', 'wL5.txt', 'wL6.txt', 'wL7.txt']
 
 #have some input to determine whether strings also get translated
 stringTranslation = True
@@ -90,11 +101,15 @@ def assessPossibilities(lines):
     
 #----------------------------------------------------------------------------------------------
 
+def verifyWord(word):
+    with open('words_alpha.txt' 'r') as words:
+        words.readlines()
+
+
 def main():
-    pigpy = open('testProgram.pigpy', 'r')
-    lines = pigpy.readlines()
-    pigpy.close()
-    print('lines read')
+    with open('testProgram.pigpy', 'r') as pigpy:
+        lines = pigpy.readlines()
+    print(f'lines read: {len(lines)}')
 
     translatedLines = []
     for line in lines:
