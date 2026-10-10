@@ -1,4 +1,6 @@
 from pathlib import Path
+import keyword
+import sys
 
 #----------------------------------------------------------------------------------------------
 
@@ -9,10 +11,12 @@ from pathlib import Path
 
 #----------------------------------------------------------------------------------------------
 
+with open('words_alpha.txt', 'r') as temp:
+    global engWords
+    engWords = set(word.strip() for word in temp)
+
 letters = 'abcdefghijklmnopqrstuvwxyz'
 vowels = 'aeiou'
-
-englishWords = ['wL1.txt', 'wL2.txt', 'wL3.txt', 'wL4.txt', 'wL5.txt', 'wL6.txt', 'wL7.txt']
 
 #have some input to determine whether strings also get translated
 stringTranslation = True
@@ -50,11 +54,12 @@ def separate(input):
                 word += char
             elif prevchar == '':
                 word += char
-            elif len(word) == 0 and prevchar != '\\':
+            elif len(word) == 0 and prevchar != backslashReplace:
                 separated.append(punctuation)
                 punctuation = ''
                 word += char
             else:
+                print('Escape char situation')
                 punctuation += char
         else:
             if len(word) != 0:
@@ -70,6 +75,9 @@ def separate(input):
     else:
         separated.append(punctuation)
 
+    if separated[-1:] == '':
+        del(separated[-1:])
+
     return separated 
 
 #----------------------------------------------------------------------------------------------
@@ -78,9 +86,26 @@ def translateToEnglish(input):
     if input[0] in vowels and input[-3:] == suffix:
         p1 = input[:-3]
         p2 = input[-3:-2] + input[:-3]
-        return [p1, p2, 2]
+        p1Valid = p1 in engWords or keyword.iskeyword(p1)
+        p2Valid = p2 in engWords or keyword.iskeyword(p2)
+
+        if p1Valid and p2Valid:
+            return [p1, p2, 2]
+        elif p1Valid:
+            return [p1, 1]
+        elif p2Valid:
+            return [p2, 1]
+        else:
+            print(f'{p1}, {p2} are not in english or python keywords')
+            return False
     elif input[0] in letters:
-        return [input[-3:-2] + input[:-3], 1]
+        result = input[-3:-2] + input[:-3]
+        resultValid = result in engWords or keyword.iskeyword(result)
+        if result in engWords:
+            return [result, 1]
+        else:
+            print(f'{result} is not in english or python keywords')
+            return False
     else:
         new = ''
         for char in input:
@@ -96,27 +121,33 @@ def assessPossibilities(lines):
     total = 1
     for l in lines:
         for sequ in l:
+            #if type(sequ) == 'string':
             total = total * (len(sequ) - 1)
     return total
     
 #----------------------------------------------------------------------------------------------
 
-def verifyWord(word):
-    with open('words_alpha.txt' 'r') as words:
-        words.readlines()
-
-
 def main():
     with open('testProgram.pigpy', 'r') as pigpy:
         lines = pigpy.readlines()
     print(f'lines read: {len(lines)}')
-
     translatedLines = []
+    lineNum = 0
     for line in lines:
+        lineNum += 1
         sequences = separate(line)
+        if lineNum == 2:
+            print(f'\n\nLine 2 sequences: {sequences}\n\n')
         translatedLine = []
+        charNum = 1
         for sequence in sequences:
+            charNum += len(sequence)
             possibleWords = translateToEnglish(sequence)
+
+            if type(possibleWords) == bool:
+                print(f"Syntax error: error occurred after {translatedLine}\nline num {lineNum} | chars {charNum-len(sequence)}-{charNum-1}", file = sys.stderr)
+                print(translatedLine)
+                sys.exit(1)
             translatedLine.append(possibleWords)
         translatedLines.append(translatedLine)
 

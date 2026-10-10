@@ -1,0 +1,8 @@
+Tasks:
+Consider capital letters
+Make sure the same piglatin strings translate to the same english strings (for variables, etc, consistency is important)
+Some python words will not be in the english set
+
+
+Notes:
+Spelling error line number and char range are counted from 1 

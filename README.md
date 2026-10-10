@@ -36,3 +36,9 @@ I initially thought I wouldn't have to use an English dictionary, but with the n
 - made functions so that it can translate lines in a separate document (.pigpy suffix)
 - a 3d array - see in pic above - of translated lines, where the first layer (idk if this is the correct terminology) is the lines, the sections (which separate words from non-words) are in the lines, and then the possibilities for each translation are in the sections.
 - a function that tells you how many combinations there are for the whole translation based on the 3d array
+
+
+### Devlog 3: 10/10/26, 6hr 16mins
+#### What I got done:
+- filtered possible translations through a set of english words and the python keywords. This reduced the possible full translation combinations from the same pigpy file as above down to just 4! Obviously this will increase with longer files, but this doesn't take into account repeating pigpy words (which will all be translated to the same english word), and it's still much better
+- added an error detection system to detect when a pigpy word is misspelt - i.e. is has no valid english counterpart. This outputs an error message and exits the program.
