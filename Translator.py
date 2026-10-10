@@ -13,12 +13,12 @@ suffix = 'way'
 
 backslashReplace = '^'
 
-"""pigpy = f""""""
-rintpay("ellohay orldway!")\n
-inputway1 = intway(inputay("irstfay umbernay{backslashReplace}n"))\n
-inputway2 = intway(inputay("econdsay umbernay{backslashReplace}n"))\n
-otaltay = inputway1 + inputway2\n
-rintpay(otaltay)\n
+temp = f"""
+rintpay("ellohay orldway!")
+inputway1 = intway(inputway("irstfay umbernay{backslashReplace}n"))
+inputway2 = intway(inputway("econdsay umbernay{backslashReplace}n"))
+otaltay = inputway1 + inputway2
+rintpay(otaltay)
 """
 
 
@@ -29,7 +29,6 @@ rintpay(otaltay)\n
 #----------------------------------------------------------------------------------------------
 
 def separate(input):
-    print(f'separate input: {input}')
     prevchar = ''
     word = ''
     punctuation = ''
@@ -55,14 +54,11 @@ def separate(input):
                 punctuation += char
 
         prevchar = char
+    if len(word) > 0:
+        separated.append(word)
+    else:
+        separated.append(punctuation)
 
-    emptyCount = 0
-    for sequ in separated:
-        if sequ == '':
-            separated.remove(sequ) 
-            emptyCount += 1
-            #for some reason there's sometimes an empty string at the start of separated
-    print(f'Empty sequences removed: {emptyCount}')
     return separated 
 
 #----------------------------------------------------------------------------------------------
@@ -85,6 +81,15 @@ def translateToEnglish(input):
 
 #----------------------------------------------------------------------------------------------
 
+def assessPossibilities(lines):
+    total = 1
+    for l in lines:
+        for sequ in l:
+            total = total * (len(sequ) - 1)
+    return total
+    
+#----------------------------------------------------------------------------------------------
+
 def main():
     pigpy = open('testProgram.pigpy', 'r')
     lines = pigpy.readlines()
@@ -96,21 +101,16 @@ def main():
         sequences = separate(line)
         translatedLine = []
         for sequence in sequences:
-            if sequence[0] in letters:
-                possibleWords = translateToEnglish(sequence)
-                translatedLine.append(possibleWords)
+            possibleWords = translateToEnglish(sequence)
+            translatedLine.append(possibleWords)
         translatedLines.append(translatedLine)
 
     print(f'translatedLines: {translatedLines}')
 
-    totalPossibilites = 1
-    for l in translatedLines:
-        for sequ in l:
-            print(f'possibilities for sequ: {sequ}')
-            print(len(sequ))
-            totalPossibilites = totalPossibilites * (len(sequ) - 1)
+    totalPossibilites = assessPossibilities(translatedLines)
     print(f'totalPossibilites: {totalPossibilites}')
 
+    
             
 #----------------------------------------------------------------------------------------------
 # Calling main:

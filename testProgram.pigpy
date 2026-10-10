@@ -1,1 +1,5 @@
-inway
+rintpay("ellohay orldway!")
+inputway1 = intway(inputway("irstfay umbernay{^}n"))
+inputway2 = intway(inputway("econdsay umbernay{^}n"))
+otaltay = inputway1 + inputway2
+rintpay(otaltay)
